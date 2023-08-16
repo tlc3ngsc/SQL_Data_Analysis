@@ -1,0 +1,103 @@
+- 8. List the frequency counts, in descending order, of all the employee last names (that is, how many employees share each last name).
+-- Tables employees_x
+SELECT l_nm, COUNT(*) AS frequency
+FROM employees_x
+GROUP BY l_nm
+ORDER BY frequency DESC
+limit 100;
+
+-- 7. List each employee in the Sales and Development departments, including their employee number, last name, first name, and department name.
+SELECT public.employees_x.emp_no, public.employees_x.last_name, public.employees.f_nm, public.departments.dept_name
+FROM employees_x
+JOIN public.department_employees ON employees_x.emp_no = department_employees.emp_no
+JOIN departments ON department_employees.dept_no = departments.dept_no
+WHERE departments.dept_name IN ('Sales', 'Development')
+limit 100;
+
+-- 6. List each employee in the Sales department, including their employee number, last name, and first name.
+SELECT employees_x.emp_no, employees_x.l_nm, employees_x.f_nm
+FROM employees_x
+JOIN public.department_employees ON employees_x.emp_no = public.department_employees.emp_no
+JOIN departments ON public.department_employees.dept_no = departments.dept_no
+WHERE departments.dept_name = 'Sales'
+limit 100;
+
+--5.	List first name, last name, and sex of each employee whose first name is 
+--           Hercules and whose last name begins with the letter B.
+
+select employees_x.f_nm,public.employees_x.l_nm,public.employees_x.sex
+FROM employees_x
+ Where employees_x.f_nm = 'Hercules' and
+       employees_x.l_nm  LIKE 'B%'
+limit 100;
+
+
+- 4.	List the department number for each employee along with that employee’s 
+--      employee number, last name, first name, and department name.
+select employees_x.f_nm,public.employees_x.l_nm,public.employees_x.hire_date,public.department_employees.dept_no
+, public.employees_x.emp_title,public.department_employees.emp_no,public.departments.dept_name
+From employees_x 
+INNER JOIN department_employees ON public.department_employees.emp_no = public.employees_x.emp_no 
+INNER JOIN departments ON public.department_employees.dept_no = public.departments.dept_no
+
+limit 100;
+
+-- 3.	List the manager of each department along with their 
+--      department number, department name, employee number, last name, and first name.
+
+
+SELECT department_managers.dept_no, department_managers.emp_no,employees_x.f_nm,employees_x.l_nm
+	FROM department_managers 
+    INNER JOIN employees_x ON employees_x.emp_no = department_managers.emp_no
+	FETCH FIRST 100 Rows ONLY;
+
+-- 2.	List the first name, last name, and hire date for the employees who were hired in 1986.
+
+select employees_x.f_nm,public.employees_x.l_nm,public.employees_x.hire_date,
+public.employees_x.sex, public.employees_x.emp_title
+From employees_x 
+where Extract(YEAR FROM employees_x.hire_date) = 1986
+--INNER JOIN employees_x ON public.employees_x.emp_no = public.emp_salary.emp_no
+--INNER JOIN department_managers ON emp_salary.emp_no = department_managers.emp_no
+
+limit 100;
+
+-- 1.	List the employee number, last name, first name, sex, and salary of each employee.
+
+
+select public.emp_salary.emp_no, public.emp_salary.emp_pay, public.employees_x.f_nm,public.employees_x.l_nm,public.employees_x.hire_date,
+public.employees_x.sex, public.employees_x.emp_title
+From emp_salary 
+INNER JOIN employees_x ON public.employees_x.emp_no = public.emp_salary.emp_no
+INNER JOIN department_managers ON emp_salary.emp_no = department_managers.emp_no
+
+limit 100;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
